@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://hhmida.github.io/tp-nosql-neo4j/index.html</loc>
+         <lastmod>2022-12-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://hhmida.github.io/tp-nosql-neo4j/cluster.html</loc>
+         <lastmod>2022-12-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://hhmida.github.io/tp-nosql-neo4j/cypher.html</loc>
+         <lastmod>2022-12-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://hhmida.github.io/tp-nosql-neo4j/etl.html</loc>
+         <lastmod>2022-12-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://hhmida.github.io/tp-nosql-neo4j/installation.html</loc>
+         <lastmod>2022-12-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://hhmida.github.io/tp-nosql-neo4j/python.html</loc>
+         <lastmod>2022-12-04</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+</urlset>
