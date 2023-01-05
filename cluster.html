@@ -1,283 +1,236 @@
-<!doctype html><html lang=fr class=no-js> <head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Atelier Neo4j"><meta name=author content="Hmida Hmida"><link rel=canonical href=https://hhmida.github.io/tp-nosql-neo4j/cluster.html><link rel=icon href=assets/images/neo4j-logo.svg><meta name=generator content="mkdocs-1.3.1, mkdocs-material-8.4.4"><title>Cluster Neo4j - Bases de données NoSQL avec Neo4j</title><link rel=stylesheet href=assets/stylesheets/main.6b80c2a2.min.css><link rel=stylesheet href=assets/stylesheets/palette.cbb835fc.min.css><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback"><style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style><link rel=stylesheet href=assets/stylesheets/extra.css><script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script></head> <body dir=ltr data-md-color-scheme=default data-md-color-primary=indigo data-md-color-accent=red> <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script> <input class=md-toggle data-md-toggle=drawer type=checkbox id=__drawer autocomplete=off> <input class=md-toggle data-md-toggle=search type=checkbox id=__search autocomplete=off> <label class=md-overlay for=__drawer></label> <div data-md-component=skip> <a href=#cluster-neo4j class=md-skip> Aller au contenu </a> </div> <div data-md-component=announce> </div> <header class="md-header md-header--lifted" data-md-component=header> <nav class="md-header__inner md-grid" aria-label=En-tête> <a href=index.html title="Bases de données NoSQL avec Neo4j" class="md-header__button md-logo" aria-label="Bases de données NoSQL avec Neo4j" data-md-component=logo> <svg viewbox="0 0 24 24" xmlns=http://www.w3.org/2000/svg><path d="M6.201 0a3.035 3.035 0 0 0-2.694 4.425 10.399 10.399 0 0 0-2.249 6.46c0 3.365 1.603 6.358 4.086 8.258A4.511 4.511 0 0 0 9.84 24a4.51 4.51 0 0 0 4.254-3.016 10.383 10.383 0 0 0 7.941-9.818c1.78-3.163.06-7.152-3.463-8.027A10.378 10.378 0 0 0 8.45.997 3.015 3.015 0 0 0 6.201 0zm5.447.986c2.246 0 4.315.746 5.975 2.004a5.493 5.493 0 1 0 3.865 8.973 9.9 9.9 0 0 1-7.24 8.476c.566-2.69-1.313-5.016-3.663-5.398-2.175-.353-4.578.91-5.163 3.541a9.87 9.87 0 0 1-3.673-7.697c0-2.268.758-4.346 2.04-6.015A3.024 3.024 0 0 0 6.2 6.071a3.038 3.038 0 0 0 2.568-4.658 9.846 9.846 0 0 1 2.879-.427zm-.96.588a.812.812 0 0 0-.573 1.387.812.812 0 1 0 .572-1.387zm2.128.748a.812.812 0 1 0 .002 1.624.812.812 0 0 0-.002-1.624zM5.193 6.748a.812.812 0 1 0 .002 1.624.812.812 0 0 0-.002-1.624zm.135 2.225a.812.812 0 0 0-.577 1.385.812.812 0 1 0 .577-1.385zm.496 2.357a.812.812 0 1 0 .002 1.624.812.812 0 0 0-.002-1.624zm1.114 2.115a.812.812 0 0 0-.573 1.387.812.812 0 1 0 .572-1.387zm10.156 1.211a.812.812 0 0 0-.573 1.387.812.812 0 1 0 .573-1.387zM15.62 16.4a.812.812 0 0 0-.576 1.386.812.812 0 1 0 .576-1.386z"/></svg> </a> <label class="md-header__button md-icon" for=__drawer> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg> </label> <div class=md-header__title data-md-component=header-title> <div class=md-header__ellipsis> <div class=md-header__topic> <span class=md-ellipsis> Bases de données NoSQL avec Neo4j </span> </div> <div class=md-header__topic data-md-component=header-topic> <span class=md-ellipsis> Cluster Neo4j </span> </div> </div> </div> <form class=md-header__option data-md-component=palette> <input class=md-option data-md-color-media data-md-color-scheme=default data-md-color-primary=indigo data-md-color-accent=red aria-label="Basculer au mode sombre" type=radio name=__palette id=__palette_1> <label class="md-header__button md-icon" title="Basculer au mode sombre" for=__palette_2 hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg> </label> <input class=md-option data-md-color-media data-md-color-scheme=slate data-md-color-primary=indigo data-md-color-accent=red aria-label="Basculer au mode clair" type=radio name=__palette id=__palette_2> <label class="md-header__button md-icon" title="Basculer au mode clair" for=__palette_1 hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg> </label> </form> <label class="md-header__button md-icon" for=__search> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg> </label> <div class=md-search data-md-component=search role=dialog> <label class=md-search__overlay for=__search></label> <div class=md-search__inner role=search> <form class=md-search__form name=search> <input type=text class=md-search__input name=query aria-label=Rechercher placeholder=Rechercher autocapitalize=off autocorrect=off autocomplete=off spellcheck=false data-md-component=search-query required> <label class="md-search__icon md-icon" for=__search> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg> </label> <nav class=md-search__options aria-label=Search> <button type=reset class="md-search__icon md-icon" aria-label=Effacer tabindex=-1> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg> </button> </nav> </form> <div class=md-search__output> <div class=md-search__scrollwrap data-md-scrollfix> <div class=md-search-result data-md-component=search-result> <div class=md-search-result__meta> Initialisation de la recherche </div> <ol class=md-search-result__list></ol> </div> </div> </div> </div> </div> </nav> <nav class=md-tabs aria-label=Onglets data-md-component=tabs> <div class="md-tabs__inner md-grid"> <ul class=md-tabs__list> <li class=md-tabs__item> <a href=index.html class=md-tabs__link> Introduction </a> </li> <li class=md-tabs__item> <a href=installation.html class=md-tabs__link> Installation </a> </li> <li class=md-tabs__item> <a href=cypher.html class=md-tabs__link> Cypher </a> </li> <li class=md-tabs__item> <a href=etl.html class=md-tabs__link> Importation de données </a> </li> <li class=md-tabs__item> <a href=python.html class=md-tabs__link> Pilote Python </a> </li> <li class=md-tabs__item> <a href=cluster.html class="md-tabs__link md-tabs__link--active"> Cluster Neo4j </a> </li> </ul> </div> </nav> </header> <div class=md-container data-md-component=container> <main class=md-main data-md-component=main> <div class="md-main__inner md-grid"> <div class="md-sidebar md-sidebar--primary" data-md-component=sidebar data-md-type=navigation> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label=Navigation data-md-level=0> <label class=md-nav__title for=__drawer> <a href=index.html title="Bases de données NoSQL avec Neo4j" class="md-nav__button md-logo" aria-label="Bases de données NoSQL avec Neo4j" data-md-component=logo> <svg viewbox="0 0 24 24" xmlns=http://www.w3.org/2000/svg><path d="M6.201 0a3.035 3.035 0 0 0-2.694 4.425 10.399 10.399 0 0 0-2.249 6.46c0 3.365 1.603 6.358 4.086 8.258A4.511 4.511 0 0 0 9.84 24a4.51 4.51 0 0 0 4.254-3.016 10.383 10.383 0 0 0 7.941-9.818c1.78-3.163.06-7.152-3.463-8.027A10.378 10.378 0 0 0 8.45.997 3.015 3.015 0 0 0 6.201 0zm5.447.986c2.246 0 4.315.746 5.975 2.004a5.493 5.493 0 1 0 3.865 8.973 9.9 9.9 0 0 1-7.24 8.476c.566-2.69-1.313-5.016-3.663-5.398-2.175-.353-4.578.91-5.163 3.541a9.87 9.87 0 0 1-3.673-7.697c0-2.268.758-4.346 2.04-6.015A3.024 3.024 0 0 0 6.2 6.071a3.038 3.038 0 0 0 2.568-4.658 9.846 9.846 0 0 1 2.879-.427zm-.96.588a.812.812 0 0 0-.573 1.387.812.812 0 1 0 .572-1.387zm2.128.748a.812.812 0 1 0 .002 1.624.812.812 0 0 0-.002-1.624zM5.193 6.748a.812.812 0 1 0 .002 1.624.812.812 0 0 0-.002-1.624zm.135 2.225a.812.812 0 0 0-.577 1.385.812.812 0 1 0 .577-1.385zm.496 2.357a.812.812 0 1 0 .002 1.624.812.812 0 0 0-.002-1.624zm1.114 2.115a.812.812 0 0 0-.573 1.387.812.812 0 1 0 .572-1.387zm10.156 1.211a.812.812 0 0 0-.573 1.387.812.812 0 1 0 .573-1.387zM15.62 16.4a.812.812 0 0 0-.576 1.386.812.812 0 1 0 .576-1.386z"/></svg> </a> Bases de données NoSQL avec Neo4j </label> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=index.html class=md-nav__link> Introduction </a> </li> <li class=md-nav__item> <a href=installation.html class=md-nav__link> Installation </a> </li> <li class=md-nav__item> <a href=cypher.html class=md-nav__link> Cypher </a> </li> <li class=md-nav__item> <a href=etl.html class=md-nav__link> Importation de données </a> </li> <li class=md-nav__item> <a href=python.html class=md-nav__link> Pilote Python </a> </li> <li class="md-nav__item md-nav__item--active"> <input class="md-nav__toggle md-toggle" data-md-toggle=toc type=checkbox id=__toc> <a href=cluster.html class="md-nav__link md-nav__link--active"> Cluster Neo4j </a> </li> </ul> </nav> </div> </div> </div> <div class=md-content data-md-component=content> <article class="md-content__inner md-typeset"> <p><img src=assets/images/cluster/cluster.svg width=50% height=50%></p> <h1 id=cluster-neo4j>Cluster Neo4j<a class=headerlink href=#cluster-neo4j title="Permanent link">&para;</a></h1> <hr> <h1 id=_1><img alt=🚧 class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/1f6a7.svg title=:construction:><a class=headerlink href=#_1 title="Permanent link">&para;</a></h1> <!--
-Create a directory ~/.nom/ssc before running Docker compose.
-Certificates are generated as by-products of running below compose file at ~/.nom/ssc directory which can be used to configure the NOM agent as given here.
-For sudo docker compose command, make sure the correct path to .nom/ssc is set in the bind section below.
-docker-compose.yaml
-Yaml
-Copy to Clipboard
-networks:
-  lan:
-
-services:
-  storage:
-    hostname: storage
-    image: neo4j:4.4.8-enterprise
-    networks:
-      - lan
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      NEO4J_ACCEPT_LICENSE_AGREEMENT: "yes"
-      NEO4J_AUTH: neo4j/passw0rd
-      NEO4J_dbms_default__advertised__address: storage
-      NEO4J_dbms_connector_http_listen__address: storage:9000
-      NEO4J_dbms_connector_bolt_listen__address: storage:9001
-    healthcheck:
-      test: [ "CMD-SHELL", "echo RETURN 1 | cypher-shell -a bolt://storage:9001 -u neo4j -p passw0rd || exit 1" ]
-
-  server:
-    hostname: server
-    image: neo4j/neo4j-ops-manager-server:latest
-    depends_on:
-      storage:
-        condition: service_healthy
-    networks:
-      - lan
-    ports:
-      - "8080:8080"
-      - "9090:9090"
-    environment:
-      SPRING_NEO4J_URI: bolt://storage:9001
-      SPRING_NEO4J_AUTHENTICATION_USERNAME: neo4j
-      SPRING_NEO4J_AUTHENTICATION_PASSWORD: passw0rd
-      SERVER_SSL_KEY_STORE_TYPE: PKCS12
-      SERVER_SSL_KEY_STORE: file:/certificates/localhost.pfx
-      SERVER_SSL_KEY_STORE_PASSWORD: changeit
-      GRPC_SERVER_SECURITY_KEY_STORE_TYPE: PKCS12
-      GRPC_SERVER_SECURITY_KEY_STORE: file:/certificates/localhost.pfx
-      GRPC_SERVER_SECURITY_KEY_STORE_PASSWORD: changeit
-      CORS_ALLOWEDHEADERS: "*"
-      CORS_ALLOWEDORIGINS: "http://localhost:[*],https://localhost:[*]"
-      JWT_SECRET: please-set-a-random-secret-string-here-for-jwt-signing
-    volumes:
-      - type: bind
-        source: ~/.nom/ssc
-        target: /certificates
-    entrypoint:
-      - "sh"
-      - "-c"
-      - "java -jar app.jar ssc -n localhost -o /certificates -p changeit -d localhost.localdomain -i 127.0.0.1 && java -jar app.jar"
-===
-Adding a managed DBMS
-Adding a DBMS in NOM’s terminology means to enable the monitoring of every instance in the DBMS by installing a NOM agent on the instance host and configuring it appropriately.
-
-Add a single instance DBMS
-Follow the steps below to add the single DBMS instance:
-
-Add a cluster
-Follow the steps below to add every instance in the cluster:
-
-Add a DBMS instance
-Prerequisites
-To be monitored by NOM an instance of a DBMS must:
-
-be running a Neo4j Enterprise Edition v4.4.0 or higher
-
-have the following config settings set in neo4j.conf:
-
-metrics.prometheus.endpoint=127.0.0.1:2004
-
-metrics.prometheus.enabled=true
-
-metrics.enabled=true
-
-metrics.filter=*
-
-metrics.jmx.enabled=true
-
-metrics.namespaces.enabled=true
-
-Register agent
-Before adding a DBMS instance for NOM monitoring, one agent needs to be registered with the NOM server which provides server communication configuration for the agent.
-
-Click the top right settings icon that redirects you to the global settings.
-
-Click Agents, where you will see a list of all registered agents along with their last contact times and versions.
-
-agents
-Click Register New Agent button, and enter the name and description for your new agent followed by clicking Register button.
-
-agent new
-
-The agent will be created and randomly generated agent credentials will be displayed on the screen.
-
-agent credentials
-
-The credentials and other key agent configuration values are displayed as environment variable declarations. You can copy them over to your instance host for ease of agent configuration.
-
-After you have captured the credentials, click the confirmation checkbox and Finish button. Newly created agent will be displayed on the list of agents.
-
-Install agent
-The following steps are required to install an agent:
-
-Standalone binaries (only linux and windows platform binaries are available)
-
-Download: Download
-
-Extract the archive:
-
-tar -xvzf <agent downloaded archive>
-Add the bin folder in the extracted directory to PATH
-
-To verify the installation, run the following command:
-
-agent version
-Which should output:
-
-<agent name> <agent version> <agent revision>
-Make sure the agent version is equal to that of the NOM server.
-
-Configure agent
-An agent’s run configurations are provided through environment variables. The following table lists configuration keys and values to be set for them:
-
-Variable    Description Example
-CONFIG_SERVER_ADDRESS
-
-Server GRPC Address
-
-server:9090
-
-CONFIG_TOKEN_URL
-
-Server Token URL
-
-https://server:8080/api/login/agent
-
-CONFIG_TOKEN_CLIENT_ID
-
-Client ID for the agent
-
-` 3ff98478-d6d2-4e1b-b816-e758c835f076`
-
-CONFIG_TOKEN_CLIENT_SECRET
-
-Client secret for the agent
-
-secret
-
-CONFIG_TLS_TRUSTED_CERTS
-
-PEM encoded trusted CA list ()
-
-/path/to/a/pem/file
-
-CONFIG_LOG_LEVEL
-
-Log level (debug,info,warn,error)
-
-info
-
-CONFIG_LOG_FILE
-
-Path to the log file
-
-/var/log/nom-agent/log.txt
-
-Since agent-server communication needs to be encrypted, you need to configure the agent so that it trusts the server’s certificates. The file that contains the trusted certificate list (PEM encoded) can be specified through the CONFIG_TLS_TRUSTED_CERTS environment variable. While most operating systems default to the system-wide trusted certificates, that’s not the case on Windows. For that reason, you must set this environment variable on Windows.
-
-Apart from the start configuration above, for each of the monitored DBMS instance(s), the following environment variables needs to be set to allow the agent to access the instance:
-
-Variable    Description Example
-CONFIG_INSTANCE_n_NAME
-
-Name of nth instance
-
-my-instance-n
-
-CONFIG_INSTANCE_n_BOLT_URI
-
-Bolt URI for nth instance
-
-bolt://localhost:7687
-
-CONFIG_INSTANCE_n_BOLT_USERNAME
-
-Bolt user name for nth instance
-
-neo4j
-
-CONFIG_INSTANCE_n_BOLT_PASSWORD
-
-Bolt password for nth instance
-
-password
-
-Environment variable considerations:
-
-n in the above environment variables needs to be replaced with 1, 2, etc. for each of the monitored DBMS instances on the same host. For example, for a single monitored DBMS, the environment variables must be named as CONFIG_INSTANCE_1_NAME, CONFIG_INSTANCE_1_BOLT_URI, CONFIG_INSTANCE_1_BOLT_USERNAME and CONFIG_INSTANCE_1_BOLT_PASSWORD.
-
-The instance name that you specify for CONFIG_INSTANCE_n_NAME will be used to identify your instance on NOM. For this reason, it is important that you specify unique names across your cluster.
-
-Agents are supposed to monitor only local instances and should not be configured to connect to remote instances.
-
-Run agent
-An agent can run in two modes, console or service. Best practice is to run an agent in service mode.
-
-Run an agent in console mode:
-
-All configuration values for the agent should be set as environment variables before starting the agent
-
-Command:
-
-agent console
-Run an agent in service mode:
-
-To run an agent in service means that the agent process runs in the background and monitors the instance and this is the recommended way. The agent lifecycle is handled by the operating system service manager.
-
-Install the service for linux (systemd):
-
-Run
-
-agent service install
-Execute
-
-systemctl edit neo4j-ops-manager-agent.service
-and set environment variables by either setting Environment or EnvironmentFile options. For example, using the Environment options, the override file looks as follows:
-
-[Service]
-Environment="CONFIG_SERVER_ADDRESS=<server grpc address>"
-Environment="CONFIG_TOKEN_URL=<server http login url>"
-Environment="CONFIG_TOKEN_CLIENT_ID=<client id>"
-Environment="CONFIG_TOKEN_CLIENT_SECRET=<client secret>"
-Environment="CONFIG_TLS_TRUSTED_CERTS=</path/to/trusted/certs/pem/file>"
-Environment="CONFIG_LOG_FILE=</path/to/nom-agent/log.txt>"
-Environment="CONFIG_INSTANCE_1_NAME=<instance name>"
-Environment="CONFIG_INSTANCE_1_BOLT_URI=<bolt uri of the local instance>"
-Environment="CONFIG_INSTANCE_1_BOLT_USERNAME=<local instance user name>"
-Environment="CONFIG_INSTANCE_1_BOLT_PASSWORD=<local instance password>"
-Start your service
-
-systemctl start neo4j-ops-manager-agent.service
-or
-
-systemctl stop neo4j-ops-manager-agent.service
-Logs are available, using journalctl, via
-
-journalctl -u neo4j-ops-manager-agent
-Install the service for Windows:
-
-Run
-
-agent service install
-Open registry editor and navigate to HKLM\SYSTEM\CurrentControlSet\Services\neo4j-ops-manager-agent.
-
-Create a key of type REG_MULTI_SZ named Environment and add your environment variables, each on a separate line:
-
-CONFIG_SERVER_ADDRESS=<server grpc address>
-CONFIG_TOKEN_URL=<server http login url>
-CONFIG_TOKEN_CLIENT_ID=<client id>
-CONFIG_TOKEN_CLIENT_SECRET=<client secret>
-CONFIG_TLS_TRUSTED_CERTS=</path/to/the/trusted/certs/pem>
-CONFIG_LOG_FILE=</path/to/nom-agent/log.txt>
-CONFIG_INSTANCE_1_NAME=<instance name>
-CONFIG_INSTANCE_1_BOLT_URI=<bolt uri of the local instance>
-CONFIG_INSTANCE_1_BOLT_USERNAME=<local instance user name>
-CONFIG_INSTANCE_1_BOLT_PASSWORD=<local instance password>
-Start your service
-
-agent service start
-To uninstall the service
-
-agent service uninstall
---> </article> </div> </div> <a href=# class="md-top md-icon" data-md-component=top hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg> Retour en haut de la page </a> </main> <footer class=md-footer> <nav class="md-footer__inner md-grid" aria-label="Pied de page"> <a href=python.html class="md-footer__link md-footer__link--prev" aria-label="Précédent: Pilote Python" rel=prev> <div class="md-footer__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg> </div> <div class=md-footer__title> <div class=md-ellipsis> <span class=md-footer__direction> Précédent </span> Pilote Python </div> </div> </a> </nav> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class=md-copyright> <div class=md-copyright__highlight> Copyright &copy; 2022 - Dr. Hmida Hmida </div> Made with <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener> Material for MkDocs </a> </div> <div class=md-social> <a href=https://gitlab.com/hhmida target=_blank rel=noopener title=gitlab.com class=md-social__link> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 512 512"><!-- Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="m503.5 204.6-.7-1.8-69.7-181.78c-1.4-3.57-3.9-6.59-7.2-8.64-2.4-1.55-5.1-2.515-8-2.81-2.9-.295-5.7.083-8.4 1.11-2.7 1.02-5.1 2.66-7.1 4.78-1.9 2.12-3.3 4.67-4.1 7.44l-47 144H160.8l-47.1-144c-.8-2.77-2.2-5.31-4.1-7.43-2-2.12-4.4-3.75-7.1-4.77a18.1 18.1 0 0 0-8.38-1.113 18.4 18.4 0 0 0-8.04 2.793 18.09 18.09 0 0 0-7.16 8.64L9.267 202.8l-.724 1.8a129.57 129.57 0 0 0-3.52 82c7.747 26.9 24.047 50.7 46.447 67.6l.27.2.59.4 105.97 79.5 52.6 39.7 32 24.2c3.7 1.9 8.3 4.3 13 4.3 4.7 0 9.3-2.4 13-4.3l32-24.2 52.6-39.7 106.7-79.9.3-.3c22.4-16.9 38.7-40.6 45.6-67.5 8.6-27 7.4-55.8-2.6-82z"/></svg> </a> <a href=https://github.com/hhmida target=_blank rel=noopener title=github.com class=md-social__link> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </a> <a href=https://linkedin.com/in/hhmida target=_blank rel=noopener title=linkedin.com class=md-social__link> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 448 512"><!-- Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg> </a> </div> </div> </div> </footer> </div> <div class=md-dialog data-md-component=dialog> <div class="md-dialog__inner md-typeset"></div> </div> <script id=__config type=application/json>{"base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "toc.integrate", "content.code.annotate"], "search": "assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.config.lang": "fr", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Rechercher", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version.title": "S\u00e9lectionner la version"}}</script> <script src=assets/javascripts/bundle.2ab50757.min.js></script> </body> </html>
+<!doctype html><html lang=fr class=no-js> <head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Atelier Neo4j"><meta name=author content="Hmida Hmida"><link rel=canonical href=https://hhmida.github.io/tp-nosql-neo4j/cluster.html><link rel=icon href=assets/images/neo4j-logo.svg><meta name=generator content="mkdocs-1.3.1, mkdocs-material-8.4.4"><title>Cluster Neo4j - Bases de données NoSQL avec Neo4j</title><link rel=stylesheet href=assets/stylesheets/main.6b80c2a2.min.css><link rel=stylesheet href=assets/stylesheets/palette.cbb835fc.min.css><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback"><style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style><link rel=stylesheet href=assets/stylesheets/extra.css><script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script></head> <body dir=ltr data-md-color-scheme=default data-md-color-primary=indigo data-md-color-accent=red> <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script> <input class=md-toggle data-md-toggle=drawer type=checkbox id=__drawer autocomplete=off> <input class=md-toggle data-md-toggle=search type=checkbox id=__search autocomplete=off> <label class=md-overlay for=__drawer></label> <div data-md-component=skip> <a href=#cluster-neo4j class=md-skip> Aller au contenu </a> </div> <div data-md-component=announce> </div> <header class="md-header md-header--lifted" data-md-component=header> <nav class="md-header__inner md-grid" aria-label=En-tête> <a href=index.html title="Bases de données NoSQL avec Neo4j" class="md-header__button md-logo" aria-label="Bases de données NoSQL avec Neo4j" data-md-component=logo> <svg viewbox="0 0 24 24" xmlns=http://www.w3.org/2000/svg><path d="M6.201 0a3.035 3.035 0 0 0-2.694 4.425 10.399 10.399 0 0 0-2.249 6.46c0 3.365 1.603 6.358 4.086 8.258A4.511 4.511 0 0 0 9.84 24a4.51 4.51 0 0 0 4.254-3.016 10.383 10.383 0 0 0 7.941-9.818c1.78-3.163.06-7.152-3.463-8.027A10.378 10.378 0 0 0 8.45.997 3.015 3.015 0 0 0 6.201 0zm5.447.986c2.246 0 4.315.746 5.975 2.004a5.493 5.493 0 1 0 3.865 8.973 9.9 9.9 0 0 1-7.24 8.476c.566-2.69-1.313-5.016-3.663-5.398-2.175-.353-4.578.91-5.163 3.541a9.87 9.87 0 0 1-3.673-7.697c0-2.268.758-4.346 2.04-6.015A3.024 3.024 0 0 0 6.2 6.071a3.038 3.038 0 0 0 2.568-4.658 9.846 9.846 0 0 1 2.879-.427zm-.96.588a.812.812 0 0 0-.573 1.387.812.812 0 1 0 .572-1.387zm2.128.748a.812.812 0 1 0 .002 1.624.812.812 0 0 0-.002-1.624zM5.193 6.748a.812.812 0 1 0 .002 1.624.812.812 0 0 0-.002-1.624zm.135 2.225a.812.812 0 0 0-.577 1.385.812.812 0 1 0 .577-1.385zm.496 2.357a.812.812 0 1 0 .002 1.624.812.812 0 0 0-.002-1.624zm1.114 2.115a.812.812 0 0 0-.573 1.387.812.812 0 1 0 .572-1.387zm10.156 1.211a.812.812 0 0 0-.573 1.387.812.812 0 1 0 .573-1.387zM15.62 16.4a.812.812 0 0 0-.576 1.386.812.812 0 1 0 .576-1.386z"/></svg> </a> <label class="md-header__button md-icon" for=__drawer> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg> </label> <div class=md-header__title data-md-component=header-title> <div class=md-header__ellipsis> <div class=md-header__topic> <span class=md-ellipsis> Bases de données NoSQL avec Neo4j </span> </div> <div class=md-header__topic data-md-component=header-topic> <span class=md-ellipsis> Cluster Neo4j </span> </div> </div> </div> <form class=md-header__option data-md-component=palette> <input class=md-option data-md-color-media data-md-color-scheme=default data-md-color-primary=indigo data-md-color-accent=red aria-label="Basculer au mode sombre" type=radio name=__palette id=__palette_1> <label class="md-header__button md-icon" title="Basculer au mode sombre" for=__palette_2 hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg> </label> <input class=md-option data-md-color-media data-md-color-scheme=slate data-md-color-primary=indigo data-md-color-accent=red aria-label="Basculer au mode clair" type=radio name=__palette id=__palette_2> <label class="md-header__button md-icon" title="Basculer au mode clair" for=__palette_1 hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg> </label> </form> <label class="md-header__button md-icon" for=__search> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg> </label> <div class=md-search data-md-component=search role=dialog> <label class=md-search__overlay for=__search></label> <div class=md-search__inner role=search> <form class=md-search__form name=search> <input type=text class=md-search__input name=query aria-label=Rechercher placeholder=Rechercher autocapitalize=off autocorrect=off autocomplete=off spellcheck=false data-md-component=search-query required> <label class="md-search__icon md-icon" for=__search> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg> </label> <nav class=md-search__options aria-label=Search> <button type=reset class="md-search__icon md-icon" aria-label=Effacer tabindex=-1> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg> </button> </nav> </form> <div class=md-search__output> <div class=md-search__scrollwrap data-md-scrollfix> <div class=md-search-result data-md-component=search-result> <div class=md-search-result__meta> Initialisation de la recherche </div> <ol class=md-search-result__list></ol> </div> </div> </div> </div> </div> </nav> <nav class=md-tabs aria-label=Onglets data-md-component=tabs> <div class="md-tabs__inner md-grid"> <ul class=md-tabs__list> <li class=md-tabs__item> <a href=index.html class=md-tabs__link> Introduction </a> </li> <li class=md-tabs__item> <a href=installation.html class=md-tabs__link> Installation </a> </li> <li class=md-tabs__item> <a href=cypher.html class=md-tabs__link> Cypher </a> </li> <li class=md-tabs__item> <a href=etl.html class=md-tabs__link> Importation de données </a> </li> <li class=md-tabs__item> <a href=python.html class=md-tabs__link> Pilote Python </a> </li> <li class=md-tabs__item> <a href=cluster.html class="md-tabs__link md-tabs__link--active"> Cluster Neo4j </a> </li> </ul> </div> </nav> </header> <div class=md-container data-md-component=container> <main class=md-main data-md-component=main> <div class="md-main__inner md-grid"> <div class="md-sidebar md-sidebar--primary" data-md-component=sidebar data-md-type=navigation> <div class=md-sidebar__scrollwrap> <div class=md-sidebar__inner> <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label=Navigation data-md-level=0> <label class=md-nav__title for=__drawer> <a href=index.html title="Bases de données NoSQL avec Neo4j" class="md-nav__button md-logo" aria-label="Bases de données NoSQL avec Neo4j" data-md-component=logo> <svg viewbox="0 0 24 24" xmlns=http://www.w3.org/2000/svg><path d="M6.201 0a3.035 3.035 0 0 0-2.694 4.425 10.399 10.399 0 0 0-2.249 6.46c0 3.365 1.603 6.358 4.086 8.258A4.511 4.511 0 0 0 9.84 24a4.51 4.51 0 0 0 4.254-3.016 10.383 10.383 0 0 0 7.941-9.818c1.78-3.163.06-7.152-3.463-8.027A10.378 10.378 0 0 0 8.45.997 3.015 3.015 0 0 0 6.201 0zm5.447.986c2.246 0 4.315.746 5.975 2.004a5.493 5.493 0 1 0 3.865 8.973 9.9 9.9 0 0 1-7.24 8.476c.566-2.69-1.313-5.016-3.663-5.398-2.175-.353-4.578.91-5.163 3.541a9.87 9.87 0 0 1-3.673-7.697c0-2.268.758-4.346 2.04-6.015A3.024 3.024 0 0 0 6.2 6.071a3.038 3.038 0 0 0 2.568-4.658 9.846 9.846 0 0 1 2.879-.427zm-.96.588a.812.812 0 0 0-.573 1.387.812.812 0 1 0 .572-1.387zm2.128.748a.812.812 0 1 0 .002 1.624.812.812 0 0 0-.002-1.624zM5.193 6.748a.812.812 0 1 0 .002 1.624.812.812 0 0 0-.002-1.624zm.135 2.225a.812.812 0 0 0-.577 1.385.812.812 0 1 0 .577-1.385zm.496 2.357a.812.812 0 1 0 .002 1.624.812.812 0 0 0-.002-1.624zm1.114 2.115a.812.812 0 0 0-.573 1.387.812.812 0 1 0 .572-1.387zm10.156 1.211a.812.812 0 0 0-.573 1.387.812.812 0 1 0 .573-1.387zM15.62 16.4a.812.812 0 0 0-.576 1.386.812.812 0 1 0 .576-1.386z"/></svg> </a> Bases de données NoSQL avec Neo4j </label> <ul class=md-nav__list data-md-scrollfix> <li class=md-nav__item> <a href=index.html class=md-nav__link> Introduction </a> </li> <li class=md-nav__item> <a href=installation.html class=md-nav__link> Installation </a> </li> <li class=md-nav__item> <a href=cypher.html class=md-nav__link> Cypher </a> </li> <li class=md-nav__item> <a href=etl.html class=md-nav__link> Importation de données </a> </li> <li class=md-nav__item> <a href=python.html class=md-nav__link> Pilote Python </a> </li> <li class="md-nav__item md-nav__item--active"> <input class="md-nav__toggle md-toggle" data-md-toggle=toc type=checkbox id=__toc> <label class="md-nav__link md-nav__link--active" for=__toc> Cluster Neo4j <span class="md-nav__icon md-icon"></span> </label> <a href=cluster.html class="md-nav__link md-nav__link--active"> Cluster Neo4j </a> <nav class="md-nav md-nav--secondary" aria-label="Table des matières"> <label class=md-nav__title for=__toc> <span class="md-nav__icon md-icon"></span> Table des matières </label> <ul class=md-nav__list data-md-component=toc data-md-scrollfix> <li class=md-nav__item> <a href=#introduction-et-architecture class=md-nav__link> Introduction et architecture </a> <nav class=md-nav aria-label="Introduction et architecture"> <ul class=md-nav__list> <li class=md-nav__item> <a href=#modes-dun-serveur class=md-nav__link> Modes d'un serveur </a> </li> <li class=md-nav__item> <a href=#etats-dun-serveur class=md-nav__link> États d'un serveur </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#deployer-un-cluseter-neo4j-sur-docker class=md-nav__link> Déployer un cluseter Neo4j sur Docker </a> </li> <li class=md-nav__item> <a href=#gestion-des-bases-de-donnees-du-cluster class=md-nav__link> Gestion des bases de données du cluster </a> <nav class=md-nav aria-label="Gestion des bases de données du cluster"> <ul class=md-nav__list> <li class=md-nav__item> <a href=#creer-une-base-de-donnees class=md-nav__link> Créer une base de données </a> </li> <li class=md-nav__item> <a href=#modifier-la-topologie-une-base-de-donnees class=md-nav__link> Modifier la topologie une base de données </a> </li> </ul> </nav> </li> <li class=md-nav__item> <a href=#gestion-des-serveurs-du-cluster class=md-nav__link> Gestion des serveurs du cluster </a> <nav class=md-nav aria-label="Gestion des serveurs du cluster"> <ul class=md-nav__list> <li class=md-nav__item> <a href=#modifier-un-serveur class=md-nav__link> Modifier un serveur </a> </li> <li class=md-nav__item> <a href=#supprimer-un-serveur class=md-nav__link> Supprimer un serveur </a> </li> <li class=md-nav__item> <a href=#ajouter-un-serveur class=md-nav__link> Ajouter un serveur </a> </li> </ul> </nav> </li> </ul> </nav> </li> </ul> </nav> </div> </div> </div> <div class=md-content data-md-component=content> <article class="md-content__inner md-typeset"> <p><img src=assets/images/cluster/cluster.svg width=50% height=50%></p> <h1 id=cluster-neo4j>Cluster Neo4j<a class=headerlink href=#cluster-neo4j title="Permanent link">&para;</a></h1> <hr> <h2 id=introduction-et-architecture>Introduction et architecture<a class=headerlink href=#introduction-et-architecture title="Permanent link">&para;</a></h2> <h3 id=modes-dun-serveur>Modes d'un serveur<a class=headerlink href=#modes-dun-serveur title="Permanent link">&para;</a></h3> <p>Les serveurs dans un cluster Neo4j ont deux modes de fonctionnement par Base de données hébergée. Ils peuvent être des serveurs <strong>Primary</strong> pour certaines BD et/ou <strong>Secondary</strong> pour d'autres BD.</p> <p>Dans la figure ci-dessous, les serveurs dans le cercle bleu héberge la BD <em>BAR</em> et ceux dans le cercle rouge la BD <em>FOO</em>. Certains sont en mode Primary et d'autres en mode Secondary.</p> <p>Le serveur à l'intersection héberge le BD <em>FOO</em> en mode Primary et <em>BAR</em> en mode Secondary.</p> <p><img alt=modes src=assets/images/cluster/operational-view.svg></p> <p>C'est identique à la notion des noeuds primaires et secondaires dans un Replica Set MongoDB.</p> <p>Un serveur Primary est utilisé dans les opérations de lecture/écriture. Les primaires de la base de données assurent la haute disponibilité en répliquant toutes les transactions à l'aide du protocole Raft. Ce protocole garantit la pérennité des données en attendant que la majorité des primaires d'une base de données (N/2+1) acquittent une transaction avant de la valider. </p> <p>Un serveur primaire est élu comme rédacteur primaire qui exécute l'opération d'écriture du client et réplique de manière synchrone les écritures aux autres primaires. </p> <p>Les secondaires de la base de données répliquent les écritures de manière asynchrone à partir de membres plus à jour du cluster.</p> <p>La principale responsabilité des serveurs secondaires est de mettre à l'échelle les charges de travail en lecture. En raison de leur nature asynchrone, les serveurs secondaires peuvent ne pas fournir toutes les transactions effectuées sur le(s) serveur(s) primaire(s).</p> <h3 id=etats-dun-serveur>États d'un serveur<a class=headerlink href=#etats-dun-serveur title="Permanent link">&para;</a></h3> <p>Un serveur Neo4j peut avoir l'un des 5 états :</p> <ul> <li>Free : Quand un serveur est découvert (discovery service) il est ajouté dans cet état avec un ID généré automatiquement. Il ne fait pas encore partie du cluster et ne peut pas héberger des bases de données.</li> <li>Enabled : Pour pouvoir utiliser un srveur Free, doit passer à l'état Enabled par la commande <code>ENABLE SERVER</code>.</li> <li>Deallocating : État précédant la suppression d'un serveur afin de réallouer les BD dans d'autres serveurs.</li> <li>Cordoned : Un état indiquant que le serveur ne peut être alloué pour héberger de nouvelles BD sans perdre les BD qu'il héberge déjà.e</li> <li>Dropped : Après la commande <code>DROP SERVER</code>, le serveur est supprimé du cluster. Il ne peut plus rejoindre le cluster que s'il obtient un nouveau ID par l'outil <code>neo4j-admin unbind</code>.</li> </ul> <p><img alt=states src=assets/images/cluster/server-states.png></p> <h2 id=deployer-un-cluseter-neo4j-sur-docker>Déployer un cluseter Neo4j sur Docker<a class=headerlink href=#deployer-un-cluseter-neo4j-sur-docker title="Permanent link">&para;</a></h2> <p><img alt=1⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/31-20e3.svg title=:one:> Créer un fichier de configuration <code>neo4j.conf</code> qui sera partagé entre les différentes instances. Son contenu est le suivant :</p> <p><div class=highlight><pre><span></span><code># paramètre de mémoire
+server.memory.pagecache.size=100M
+server.memory.heap.initial_size=100M
+
+# Découverte du cluster basée sur les enregistrement DNS
+dbms.cluster.discovery.type=DNS
+
+#Adresse du réseau du cluster pour la découverte automatique
+dbms.cluster.discovery.endpoints=neo4j-network:5000
+
+# hostname/IP address du serveur pour la découverte du cluster
+server.discovery.advertised_address=$(hostname -i)
+
+# hostname/IP du serveur pour échange des messages Raft dans le cluster
+server.cluster.raft.advertised_address=$(hostname)
+
+ # hostname/IP du serveur pour la gestion des transactions
+server.cluster.advertised_address=$(hostname)
+
+# Activer server-side routing
+dbms.routing.enabled=true
+
+# Utiliser server-side routing pour les connexions avec le protocole neo4j://.
+dbms.routing.default_router=SERVER
+
+# hostname/IP du serveur pour le routage intra-cluster.
+server.routing.advertised_address=$(hostname)
+</code></pre></div> <img alt=⚠ class="twemoji heart" src=https://twemoji.maxcdn.com/v/latest/svg/26a0.svg title=:warning:> modifier les persmissions de ce fichier <code>sudo chmod 640 neo4j.conf</code></p> <details class=info open=open> <summary>Paramètres pour cluster Neo4j</summary> <table> <thead> <tr> <th align=left>Paramètre</th> <th align=left>Description</th> </tr> </thead> <tbody> <tr> <td align=left><code>server.default_advertised_address</code></td> <td align=left>Nom (FQDN) ou adresse du serveur.</td> </tr> <tr> <td align=left><code>server.default_listen_address</code></td> <td align=left>Adresse de l'interface d'écoute. Utiliser l'adresse <code>0.0.0.0</code> pour être à l'écoute sur toutes les cartes réseau.</td> </tr> <tr> <td align=left><code>dbms.cluster.discovery.endpoints</code></td> <td align=left>L'adress d'au moins un serveur du cluster qui doit être le même pour tous les serveurs membres du cluster. Le comportement de ce paramètre est modifié par le paramètre <code>dbms.cluster.discovery.type</code>.</td> </tr> <tr> <td align=left><code>initial.dbms.default_primaries_count</code></td> <td align=left>Le nombre intial des serveur en mode primary. Par défaut 1.</td> </tr> <tr> <td align=left><code>initial.dbms.default_secondaries_count</code></td> <td align=left>Le nombre intial des serveur en mode secondary. Par défaut 0.</td> </tr> </tbody> </table> </details> <details class=info open=open> <summary>Variables d'environment</summary> <p>La configuration du cluster utilise aussi des variables d'environnement.</p> <table> <thead> <tr> <th align=left>Variable</th> <th align=left>Description</th> </tr> </thead> <tbody> <tr> <td align=left><code>NEO4J_initial_server_mode__constraint</code></td> <td align=left>mode PRIMARY ou SECONDARY.</td> </tr> <tr> <td align=left><code>NEO4J_dbms_cluster_discovery_endpoints</code></td> <td align=left>liste des serveurs à contacter pour la découverte du cluster.</td> </tr> <tr> <td align=left><code>NEO4J_server_discovery_advertised_address</code></td> <td align=left>hostname/IP à publier pour la découverte des membres.</td> </tr> <tr> <td align=left><code>NEO4J_server.cluster.advertised_address</code></td> <td align=left>hostname/IP à publier pour la gestion des transactions.</td> </tr> <tr> <td align=left><code>NEO4J_server.cluster.raft.advertised_address</code></td> <td align=left>hostname/IP à publier pour la communication dans le cluster.</td> </tr> </tbody> </table> </details> <p><img alt=2⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/32-20e3.svg title=:two:> Créer le fichier <code>docker-compose.yml</code>suivant :</p> <div class=highlight><pre><span></span><code><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=s>&#39;3.8&#39;</span><span class=w></span>
+
+<span class=c1># Custom top-level network</span><span class=w></span>
+<span class=nt>networks</span><span class=p>:</span><span class=w></span>
+<span class=w>  </span><span class=nt>neo4j-internal</span><span class=p>:</span><span class=w></span>
+
+<span class=nt>services</span><span class=p>:</span><span class=w></span>
+
+<span class=w>  </span><span class=nt>server1</span><span class=p>:</span><span class=w></span>
+<span class=w>    </span><span class=c1># Image Docker</span><span class=w></span>
+<span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">${NEO4J_DOCKER_IMAGE}</span><span class=w></span>
+
+<span class=w>    </span><span class=c1># Hostname</span><span class=w></span>
+<span class=w>    </span><span class=nt>hostname</span><span class=p>:</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">server1</span><span class=w></span>
+
+<span class=w>    </span><span class=c1># Réseau du cluster (à utiliser dans neo4j.conf pour la découverte du cluster) </span><span class=w></span>
+<span class=w>    </span><span class=nt>networks</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class=nt>neo4j-internal</span><span class=p>:</span><span class=w></span>
+<span class=w>        </span><span class=nt>aliases</span><span class=p>:</span><span class=w></span>
+<span class=w>          </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">neo4j-network</span><span class=w></span>
+
+<span class=w>    </span><span class=c1># HTTP (7474) et Bolt (7687).</span><span class=w></span>
+<span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class=s>&quot;7474:7474&quot;</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class=s>&quot;7687:7687&quot;</span><span class=w></span>
+
+<span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./neo4j.conf:/conf/neo4j.conf</span><span class=w> </span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./data/server1:/var/lib/neo4j/data</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./logs/server1:/var/lib/neo4j/logs</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./conf/server1:/var/lib/neo4j/conf</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./import/server1:/var/lib/neo4j/import</span><span class=w></span>
+<span class=w>      </span><span class=c1>#- ./metrics/server1:/var/lib/neo4j/metrics</span><span class=w></span>
+<span class=w>      </span><span class=c1>#- ./licenses/server1:/var/lib/neo4j/licenses</span><span class=w></span>
+<span class=w>      </span><span class=c1>#- ./ssl/server1:/var/lib/neo4j/ssl</span><span class=w></span>
+
+<span class=w>    </span><span class=c1># Les variables d&#39;environnement à utiliser et qui doivent être préalablement intialisées (voir plus bas)</span><span class=w></span>
+<span class=w>    </span><span class=c1># Seuelemt la variable pour le choix du mode est intialisé ici</span><span class=w></span>
+<span class=w>    </span><span class=nt>environment</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_ACCEPT_LICENSE_AGREEMENT</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_AUTH</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">EXTENDED_CONF</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_EDITION</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_initial_server_mode__constraint=PRIMARY</span><span class=w></span>
+
+<span class=w>    </span><span class=c1># Vérifier que le port 7474 est ouvert</span><span class=w></span>
+<span class=w>    </span><span class=nt>healthcheck</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class=nt>test</span><span class=p>:</span><span class=w> </span><span class="p p-Indicator">[</span><span class=s>&quot;CMD-SHELL&quot;</span><span class="p p-Indicator">,</span><span class=w> </span><span class=s>&quot;wget</span><span class=nv> </span><span class=s>--no-verbose</span><span class=nv> </span><span class=s>--tries=1</span><span class=nv> </span><span class=s>--spider</span><span class=nv> </span><span class=s>localhost:7474</span><span class=nv> </span><span class=s>||</span><span class=nv> </span><span class=s>exit</span><span class=nv> </span><span class=s>1&quot;</span><span class="p p-Indicator">]</span><span class=w></span>
+
+<span class=w>    </span><span class=c1># Utilisateur/Groupe</span><span class=w></span>
+<span class=w>    </span><span class=nt>user</span><span class=p>:</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">${USER_ID}:${GROUP_ID}</span><span class=w></span>
+
+<span class=w>  </span><span class=nt>server2</span><span class=p>:</span><span class=w></span>
+<span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">${NEO4J_DOCKER_IMAGE}</span><span class=w></span>
+<span class=w>    </span><span class=nt>hostname</span><span class=p>:</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">server2</span><span class=w></span>
+<span class=w>    </span><span class=nt>networks</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class=nt>neo4j-internal</span><span class=p>:</span><span class=w></span>
+<span class=w>        </span><span class=nt>aliases</span><span class=p>:</span><span class=w></span>
+<span class=w>          </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">neo4j-network</span><span class=w></span>
+<span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class=s>&quot;7475:7474&quot;</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class=s>&quot;7688:7687&quot;</span><span class=w></span>
+<span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./neo4j.conf:/conf/neo4j.conf</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./data/server2:/var/lib/neo4j/data</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./logs/server2:/var/lib/neo4j/logs</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./conf/server2:/var/lib/neo4j/conf</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./import/server2:/var/lib/neo4j/import</span><span class=w></span>
+<span class=w>      </span><span class=c1>#- ./metrics/server2:/var/lib/neo4j/metrics</span><span class=w></span>
+<span class=w>      </span><span class=c1>#- ./licenses/server2:/var/lib/neo4j/licenses</span><span class=w></span>
+<span class=w>      </span><span class=c1>#- ./ssl/server2:/var/lib/neo4j/ssl</span><span class=w></span>
+<span class=w>    </span><span class=nt>environment</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_ACCEPT_LICENSE_AGREEMENT</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_AUTH</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">EXTENDED_CONF</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_EDITION</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_initial_server_mode__constraint=PRIMARY</span><span class=w></span>
+<span class=w>    </span><span class=nt>healthcheck</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class=nt>test</span><span class=p>:</span><span class=w> </span><span class="p p-Indicator">[</span><span class=s>&quot;CMD-SHELL&quot;</span><span class="p p-Indicator">,</span><span class=w> </span><span class=s>&quot;wget</span><span class=nv> </span><span class=s>--no-verbose</span><span class=nv> </span><span class=s>--tries=1</span><span class=nv> </span><span class=s>--spider</span><span class=nv> </span><span class=s>localhost:7474</span><span class=nv> </span><span class=s>||</span><span class=nv> </span><span class=s>exit</span><span class=nv> </span><span class=s>1&quot;</span><span class="p p-Indicator">]</span><span class=w></span>
+<span class=w>    </span><span class=nt>user</span><span class=p>:</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">${USER_ID}:${GROUP_ID}</span><span class=w></span>
+
+<span class=w>  </span><span class=nt>server3</span><span class=p>:</span><span class=w></span>
+<span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">${NEO4J_DOCKER_IMAGE}</span><span class=w></span>
+<span class=w>    </span><span class=nt>hostname</span><span class=p>:</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">server3</span><span class=w></span>
+<span class=w>    </span><span class=nt>networks</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class=nt>neo4j-internal</span><span class=p>:</span><span class=w></span>
+<span class=w>        </span><span class=nt>aliases</span><span class=p>:</span><span class=w></span>
+<span class=w>          </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">neo4j-network</span><span class=w></span>
+<span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class=s>&quot;7476:7474&quot;</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class=s>&quot;7689:7687&quot;</span><span class=w></span>
+<span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./neo4j.conf:/conf/neo4j.conf</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./data/server3:/var/lib/neo4j/data</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./logs/server3:/var/lib/neo4j/logs</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./conf/server3:/var/lib/neo4j/conf</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./import/server3:/var/lib/neo4j/import</span><span class=w></span>
+<span class=w>      </span><span class=c1>#- ./metrics/server3:/var/lib/neo4j/metrics</span><span class=w></span>
+<span class=w>      </span><span class=c1>#- ./licenses/server3:/var/lib/neo4j/licenses</span><span class=w></span>
+<span class=w>      </span><span class=c1>#- ./ssl/server3:/var/lib/neo4j/ssl</span><span class=w></span>
+<span class=w>    </span><span class=nt>environment</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_ACCEPT_LICENSE_AGREEMENT</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_AUTH</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">EXTENDED_CONF</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_EDITION</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_initial_server_mode__constraint=PRIMARY</span><span class=w></span>
+<span class=w>    </span><span class=nt>healthcheck</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class=nt>test</span><span class=p>:</span><span class=w> </span><span class="p p-Indicator">[</span><span class=s>&quot;CMD-SHELL&quot;</span><span class="p p-Indicator">,</span><span class=w> </span><span class=s>&quot;wget</span><span class=nv> </span><span class=s>--no-verbose</span><span class=nv> </span><span class=s>--tries=1</span><span class=nv> </span><span class=s>--spider</span><span class=nv> </span><span class=s>localhost:7474</span><span class=nv> </span><span class=s>||</span><span class=nv> </span><span class=s>exit</span><span class=nv> </span><span class=s>1&quot;</span><span class="p p-Indicator">]</span><span class=w></span>
+<span class=w>    </span><span class=nt>user</span><span class=p>:</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">${USER_ID}:${GROUP_ID}</span><span class=w></span>
+
+<span class=w>  </span><span class=nt>server4</span><span class=p>:</span><span class=w></span>
+<span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">${NEO4J_DOCKER_IMAGE}</span><span class=w></span>
+<span class=w>    </span><span class=nt>hostname</span><span class=p>:</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">server4</span><span class=w></span>
+<span class=w>    </span><span class=nt>networks</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class=nt>neo4j-internal</span><span class=p>:</span><span class=w></span>
+<span class=w>        </span><span class=nt>aliases</span><span class=p>:</span><span class=w></span>
+<span class=w>          </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">neo4j-network</span><span class=w></span>
+<span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class=s>&quot;7477:7474&quot;</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class=s>&quot;7690:7687&quot;</span><span class=w></span>
+<span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./neo4j.conf:/conf/neo4j.conf</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./data/server4:/var/lib/neo4j/data</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./logs/server4:/var/lib/neo4j/logs</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./conf/server4:/var/lib/neo4j/conf</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">./import/server4:/var/lib/neo4j/import</span><span class=w></span>
+<span class=w>      </span><span class=c1>#- ./metrics/server4:/var/lib/neo4j/metrics</span><span class=w></span>
+<span class=w>      </span><span class=c1>#- ./licenses/server4:/var/lib/neo4j/licenses</span><span class=w></span>
+<span class=w>      </span><span class=c1>#- ./ssl/server4:/var/lib/neo4j/ssl</span><span class=w></span>
+<span class=w>    </span><span class=nt>environment</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_ACCEPT_LICENSE_AGREEMENT</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_AUTH</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">EXTENDED_CONF</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_EDITION</span><span class=w></span>
+<span class=w>      </span><span class="p p-Indicator">-</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">NEO4J_initial_server_mode__constraint=SECONDARY</span><span class=w></span>
+<span class=w>    </span><span class=nt>healthcheck</span><span class=p>:</span><span class=w></span>
+<span class=w>      </span><span class=nt>test</span><span class=p>:</span><span class=w> </span><span class="p p-Indicator">[</span><span class=s>&quot;CMD-SHELL&quot;</span><span class="p p-Indicator">,</span><span class=w> </span><span class=s>&quot;wget</span><span class=nv> </span><span class=s>--no-verbose</span><span class=nv> </span><span class=s>--tries=1</span><span class=nv> </span><span class=s>--spider</span><span class=nv> </span><span class=s>localhost:7474</span><span class=nv> </span><span class=s>||</span><span class=nv> </span><span class=s>exit</span><span class=nv> </span><span class=s>1&quot;</span><span class="p p-Indicator">]</span><span class=w></span>
+<span class=w>    </span><span class=nt>user</span><span class=p>:</span><span class=w> </span><span class="l l-Scalar l-Scalar-Plain">${USER_ID}:${GROUP_ID}</span><span class=w></span>
+</code></pre></div> <p><img alt=3⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/33-20e3.svg title=:three:> Ajouter les variables d'environnement suivantes :</p> <p><div class=highlight><pre><span></span><code><span class=nb>export</span> <span class=nv>USER_ID</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span>id -u<span class=k>)</span><span class=s2>&quot;</span>
+
+<span class=nb>export</span> <span class=nv>GROUP_ID</span><span class=o>=</span><span class=s2>&quot;</span><span class=k>$(</span>id -g<span class=k>)</span><span class=s2>&quot;</span>
+
+<span class=nb>export</span> <span class=nv>NEO4J_DOCKER_IMAGE</span><span class=o>=</span>neo4j:5.2.0-enterprise
+
+<span class=nb>export</span> <span class=nv>NEO4J_EDITION</span><span class=o>=</span>docker_compose
+
+<span class=nb>export</span> <span class=nv>EXTENDED_CONF</span><span class=o>=</span>yes
+
+<span class=nb>export</span> <span class=nv>NEO4J_ACCEPT_LICENSE_AGREEMENT</span><span class=o>=</span>yes
+
+<span class=nb>export</span> <span class=nv>NEO4J_AUTH</span><span class=o>=</span>neo4j/Passw0rds
+</code></pre></div> <img alt=4⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/34-20e3.svg title=:four:> Déployer le cluster en exécutant <code>docker-compose</code> depuis le dossier contenant le fichier <code>docker-compose.yaml</code></p> <div class=highlight><pre><span></span><code>docker-compose up -d
+</code></pre></div> <p><img alt=5⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/35-20e3.svg title=:five:> Accéder aux serveurs</p> <p>Les serveurs sont accesible sur :</p> <table> <thead> <tr> <th align=left>Serveur</th> <th align=left>URL</th> </tr> </thead> <tbody> <tr> <td align=left>server1</td> <td align=left><a href=http://localhost:7474>http://localhost:7474</a></td> </tr> <tr> <td align=left>server2</td> <td align=left><a href=http://localhost:7475>http://localhost:7475</a></td> </tr> <tr> <td align=left>server3</td> <td align=left><a href=http://localhost:7476>http://localhost:7476</a></td> </tr> <tr> <td align=left>server4</td> <td align=left><a href=http://localhost:7477>http://localhost:7477</a></td> </tr> </tbody> </table> <p><img alt=6⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/36-20e3.svg title=:six:> Vérifier les seveurs</p> <p>Depuis un serveur se connecter sur Neo4j Browser et exécuter la commande</p> <div class=highlight><pre><span></span><code><span class=k>SHOW</span><span class=w> </span><span class=n>SERVERS</span><span class=w></span>
+</code></pre></div> <details class=info open=open> <summary>Avec docker run</summary> <p>Il est possible de démarrer les containers individuellement avec la commande <code>docker run</code>. Ci-après un exemple pour créer un cluster de 3 serveurs. <div class=highlight><pre><span></span><code>docker network create --driver<span class=o>=</span>bridge neo4j-cluster
+
+docker run --name<span class=o>=</span>server1 --detach --network<span class=o>=</span>neo4j-cluster <span class=se>\</span>
+    --publish<span class=o>=</span><span class=m>7474</span>:7474 --publish<span class=o>=</span><span class=m>7473</span>:7473 --publish<span class=o>=</span><span class=m>7687</span>:7687 <span class=se>\</span>
+    --hostname<span class=o>=</span>server1 <span class=se>\</span>
+    --env <span class=nv>NEO4J_initial_server_mode__constraint</span><span class=o>=</span>PRIMARY <span class=se>\</span>
+    --env <span class=nv>NEO4J_dbms_cluster_discovery_endpoints</span><span class=o>=</span>server1:5000,server2:5000,server3:5000 <span class=se>\</span>
+    --env <span class=nv>NEO4J_ACCEPT_LICENSE_AGREEMENT</span><span class=o>=</span>yes <span class=se>\</span>
+    --env <span class=nv>NEO4j_server_bolt_advertised_address</span><span class=o>=</span>localhost:7687 <span class=se>\</span>
+    --env <span class=nv>NEO4j_server_http_advertised_address</span><span class=o>=</span>localhost:7474 <span class=se>\</span>
+    --env <span class=nv>NEO4J_AUTH</span><span class=o>=</span>neo4j/Passw0rd <span class=se>\</span>
+    neo4j:5.2.0-enterprise
+
+docker run --name<span class=o>=</span>server2 --detach --network<span class=o>=</span>neo4j-cluster <span class=se>\</span>
+    --publish<span class=o>=</span><span class=m>8474</span>:7474 --publish<span class=o>=</span><span class=m>8473</span>:7473 --publish<span class=o>=</span><span class=m>8687</span>:7687 <span class=se>\</span>
+    --hostname<span class=o>=</span>server2 <span class=se>\</span>
+    --env <span class=nv>NEO4J_initial_server_mode__constraint</span><span class=o>=</span>PRIMARY <span class=se>\</span>
+    --env <span class=nv>NEO4J_dbms_cluster_discovery_endpoints</span><span class=o>=</span>server1:5000,server2:5000,server3:5000 <span class=se>\</span>
+    --env <span class=nv>NEO4J_ACCEPT_LICENSE_AGREEMENT</span><span class=o>=</span>yes <span class=se>\</span>
+    --env <span class=nv>NEO4j_server_bolt_advertised_address</span><span class=o>=</span>localhost:8687 <span class=se>\</span>
+    --env <span class=nv>NEO4j_server_http_advertised_address</span><span class=o>=</span>localhost:8474 <span class=se>\</span>
+    --env <span class=nv>NEO4J_AUTH</span><span class=o>=</span>neo4j/Passw0rd <span class=se>\</span>
+    neo4j:5.2.0-enterprise
+
+docker run --name<span class=o>=</span>server3 --detach --network<span class=o>=</span>neo4j-cluster <span class=se>\</span>
+    --publish<span class=o>=</span><span class=m>9474</span>:7474 --publish<span class=o>=</span><span class=m>9473</span>:7473 --publish<span class=o>=</span><span class=m>9687</span>:7687 <span class=se>\</span>
+    --hostname<span class=o>=</span>server3 <span class=se>\</span>
+    --env <span class=nv>NEO4J_initial_server_mode__constraint</span><span class=o>=</span>PRIMARY <span class=se>\</span>
+    --env <span class=nv>NEO4J_dbms_cluster_discovery_endpoints</span><span class=o>=</span>server1:5000,server2:5000,server3:5000 <span class=se>\</span>
+    --env <span class=nv>NEO4J_ACCEPT_LICENSE_AGREEMENT</span><span class=o>=</span>yes <span class=se>\</span>
+    --env <span class=nv>NEO4j_server_bolt_advertised_address</span><span class=o>=</span>localhost:9687 <span class=se>\</span>
+    --env <span class=nv>NEO4j_server_http_advertised_address</span><span class=o>=</span>localhost:9474 <span class=se>\</span>
+    --env <span class=nv>NEO4J_AUTH</span><span class=o>=</span>neo4j/Passw0rd <span class=se>\</span>
+    neo4j:5.2.0-enterprise
+
+docker run --name<span class=o>=</span>read-server4 --detach --network<span class=o>=</span>neo4j-cluster <span class=se>\</span>
+  --publish<span class=o>=</span><span class=m>10474</span>:7474 --publish<span class=o>=</span><span class=m>10473</span>:7473 --publish<span class=o>=</span><span class=m>10687</span>:7687 <span class=se>\</span>
+  --hostname<span class=o>=</span>read-server4 <span class=se>\</span>
+  --env <span class=nv>NEO4J_initial_server_mode__constraint</span><span class=o>=</span>SECONDARY <span class=se>\</span>
+  --env <span class=nv>NEO4J_dbms_cluster_discovery_endpoints</span><span class=o>=</span>server1:5000,server2:5000,server3:5000 <span class=se>\</span>
+  --env <span class=nv>NEO4J_ACCEPT_LICENSE_AGREEMENT</span><span class=o>=</span>yes <span class=se>\</span>
+  --env <span class=nv>NEO4j_server_bolt_advertised_address</span><span class=o>=</span>localhost:10687 <span class=se>\</span>
+  --env <span class=nv>NEO4j_server_http_advertised_address</span><span class=o>=</span>localhost:10474 <span class=se>\</span>
+  --env <span class=nv>NEO4J_AUTH</span><span class=o>=</span>neo4j/Passw0rd <span class=se>\</span>
+  neo4j:5.3.0-enterprise
+</code></pre></div></p> </details> <h2 id=gestion-des-bases-de-donnees-du-cluster>Gestion des bases de données du cluster<a class=headerlink href=#gestion-des-bases-de-donnees-du-cluster title="Permanent link">&para;</a></h2> <h3 id=creer-une-base-de-donnees>Créer une base de données<a class=headerlink href=#creer-une-base-de-donnees title="Permanent link">&para;</a></h3> <p>La création d'une base de données sur un cluster consiste à spécifier la topologie désirée : nombre de primary et secondary.</p> <p>Voir la référence de la commande <a href=cypher.html#manipulation-de-bases-de-donnees>CREATE DATABASE</a></p> <p><img alt=1⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/31-20e3.svg title=:one:> Créer une BD avec 2 primaires et 1 secondaire</p> <div class=highlight><pre><span></span><code><span class=k>CREATE</span><span class=w> </span><span class=k>DATABASE</span><span class=w> </span><span class=n>exemple</span><span class=w> </span><span class=n>TOPOLOGY</span><span class=w> </span><span class=mi>1</span><span class=w> </span><span class=n>PRIMARIES</span><span class=w> </span><span class=mi>2</span><span class=w> </span><span class=n>SECONDARY</span><span class=w></span>
+</code></pre></div> <details class=warning open=open> <summary>Attention</summary> <p>La création de la base de données n'est réalisée que si le cluster est en mesure de satisfaire la topologie demandée.</p> <p>Par exemple, si le cluster n'a pas 3 serveurs cette commande échoue.</p> </details> <p><img alt=2⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/32-20e3.svg title=:two:> Afficher l'état de la topologie de la BD</p> <p><div class=highlight><pre><span></span><code><span class=k>SHOW</span><span class=w> </span><span class=n>DATABASES</span><span class=w> </span><span class=n>yield</span><span class=w> </span><span class=n>name</span><span class=p>,</span><span class=w> </span><span class=n>currentPrimariesCount</span><span class=p>,</span><span class=w> </span><span class=n>currentSecondariesCount</span><span class=p>,</span><span class=w> </span><span class=n>requestedPrimariesCount</span><span class=p>,</span><span class=w> </span><span class=n>requestedSecondariesCount</span><span class=w></span>
+</code></pre></div> <img alt=3⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/33-20e3.svg title=:three:> Ajouter des données en important, par exemple, la base <a href=cypher.html#base-de-donnees-exemple--movie-graph>Movie Graph</a></p> <h3 id=modifier-la-topologie-une-base-de-donnees>Modifier la topologie une base de données<a class=headerlink href=#modifier-la-topologie-une-base-de-donnees title="Permanent link">&para;</a></h3> <p>Voir la commande <a href=cypher.html#manipulation-de-bases-de-donnees>ALTER DATABASE</a></p> <p><img alt=1⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/31-20e3.svg title=:one:> Changer le topologie de la BD exemple</p> <div class=highlight><pre><span></span><code><span class=k>ALTER</span><span class=w> </span><span class=k>DATABASE</span><span class=w> </span><span class=n>exemple</span><span class=w> </span><span class=k>SET</span><span class=w> </span><span class=n>TOPOLOGY</span><span class=w> </span><span class=mi>1</span><span class=w> </span><span class=k>PRIMARY</span><span class=w> </span><span class=mi>2</span><span class=w> </span><span class=n>SECONDARIES</span><span class=w></span>
+</code></pre></div> <details class=warning open=open> <summary>Attention</summary> <p>La modification de topologie n'est réussie que si le cluster contient les serveurs nécessaires.</p> <p>Pour une BD avec 1 unique primaire la transition automatique est impossible. Dance ce cas, il faut sauvegarder la BD, la supprimer puis la restaurer avec la nouvelle topologie.</p> </details> <h2 id=gestion-des-serveurs-du-cluster>Gestion des serveurs du cluster<a class=headerlink href=#gestion-des-serveurs-du-cluster title="Permanent link">&para;</a></h2> <h3 id=modifier-un-serveur>Modifier un serveur<a class=headerlink href=#modifier-un-serveur title="Permanent link">&para;</a></h3> <p><img alt=1⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/31-20e3.svg title=:one:> Changer le nom du serveur <code>135ad202-5405-4d3c-9822-df39f59b823c</code> (utiliser l'id d'un serveur parmi ceux hébergeant la BD exemple)</p> <p><div class=highlight><pre><span></span><code><span class=k>RENAME</span><span class=w> </span><span class=n>SERVER</span><span class=w> </span><span class=o>`</span><span class=mi>135</span><span class=n>ad202</span><span class=o>-</span><span class=mi>5405</span><span class=o>-</span><span class=mi>4</span><span class=n>d3c</span><span class=o>-</span><span class=mi>9822</span><span class=o>-</span><span class=n>df39f59b823c</span><span class=o>`</span><span class=w> </span><span class=k>TO</span><span class=w> </span><span class=s1>&#39;SERVER01&#39;</span><span class=p>;</span><span class=w></span>
+</code></pre></div> <img alt=2⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/32-20e3.svg title=:two:> Ajouter une contrainte de mode </p> <div class=highlight><pre><span></span><code><span class=k>ALTER</span><span class=w> </span><span class=n>SERVER</span><span class=w> </span><span class=s1>&#39;SERVER01&#39;</span><span class=w> </span><span class=k>SET</span><span class=w> </span><span class=k>OPTIONS</span><span class=w> </span><span class=err>{</span><span class=n>modeConstraint</span><span class=p>:</span><span class=s1>&#39;SECONDARY&#39;</span><span class=err>}</span><span class=p>;</span><span class=w></span>
+</code></pre></div> <p><img alt=💡 class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/1f4a1.svg title=:bulb:> Le serveur SERVER01 ne peut être que secondaire.</p> <h3 id=supprimer-un-serveur>Supprimer un serveur<a class=headerlink href=#supprimer-un-serveur title="Permanent link">&para;</a></h3> <p>La suppression d'un serveur depuis un cluster requiert 2 étapes :</p> <ol> <li>Désaffecter les BD du serveur</li> <li>Supprimer le serveur</li> </ol> <p><img alt=1⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/31-20e3.svg title=:one:> Récupérer l'id du serveur</p> <div class=highlight><pre><span></span><code><span class=k>SHOW</span><span class=w> </span><span class=n>SERVERS</span><span class=w> </span><span class=n>yield</span><span class=w> </span><span class=n>name</span><span class=w></span>
+</code></pre></div> <p><img alt=2⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/32-20e3.svg title=:two:> Désaffecter les bases de données de ce serveur</p> <div class=highlight><pre><span></span><code><span class=n>DRYRUN</span><span class=w> </span><span class=k>DEALLOCATE</span><span class=w> </span><span class=n>DATABASES</span><span class=w> </span><span class=k>FROM</span><span class=w> </span><span class=n>SERVER</span><span class=w> </span><span class=s1>&#39;SERVER01&#39;</span><span class=p>;</span><span class=w></span>
+</code></pre></div> <details class=info open=open> <summary>DRYRUN</summary> <p>La commande <code>DRYRUN</code> permet d'afficher comment les BD seront déplacées.</p> </details> <p><img alt=3⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/33-20e3.svg title=:three:> Attendre l'opération de déplacement des BD en vérifiant avec <code>SHOW SERVERS</code></p> <p><img alt=4⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/34-20e3.svg title=:four:> Supprimer le serveur</p> <div class=highlight><pre><span></span><code><span class=k>DROP</span><span class=w> </span><span class=n>SERVER</span><span class=w> </span><span class=s1>&#39;SERVER01&#39;</span><span class=p>;</span><span class=w></span>
+</code></pre></div> <h3 id=ajouter-un-serveur>Ajouter un serveur<a class=headerlink href=#ajouter-un-serveur title="Permanent link">&para;</a></h3> <p><img alt=1⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/31-20e3.svg title=:one:> Démarrer le serveur et attendre la découverte du cluster.</p> <p><img alt=2⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/32-20e3.svg title=:two:> Vérifier avec <code>SHOW SERVERS</code> qu'il apparaît avec l'état <code>FREE</code></p> <p><img alt=3⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/33-20e3.svg title=:three:> Activer le serveur</p> <p><div class=highlight><pre><span></span><code><span class=n>ENABLE</span><span class=w> </span><span class=n>SERVER</span><span class=w> </span><span class=s1>&#39;25a7efc7-d063-44b8-bdee-f23357f89f01&#39;</span><span class=w> </span><span class=k>OPTIONS</span><span class=w></span>
+<span class=w>    </span><span class=err>{</span><span class=n>modeConstraint</span><span class=p>:</span><span class=s1>&#39;PRIMARY&#39;</span><span class=p>,</span><span class=w> </span><span class=n>allowedDatabases</span><span class=p>:[</span><span class=s1>&#39;exemple&#39;</span><span class=p>]</span><span class=err>}</span><span class=p>;</span><span class=w></span>
+</code></pre></div> <img alt=💡 class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/1f4a1.svg title=:bulb:> La partie OPTIONS est facultative et peut être remplacée par une configuration du fichier neo4j.conf.</p> <p><img alt=4⃣ class=twemoji src=https://twemoji.maxcdn.com/v/latest/svg/34-20e3.svg title=:four:> Affectation de BD</p> <p>Le serveur ne recevra pas automatiquement une base de données à moins que l'un des événements suivants soit déclenché et le cluster aie eu besoin de ce serveur :</p> <ul> <li>Création de nouvelle BD,</li> <li>Changement de topologie d'une DB existante,</li> <li>Désaffectation d'un autre serveur,</li> <li>Demande explicite de réallocation des BD pour balancer le cluster avec <code>DRYRUN REALLOCATE DATABASES;</code></li> </ul> </article> </div> </div> <a href=# class="md-top md-icon" data-md-component=top hidden> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg> Retour en haut de la page </a> </main> <footer class=md-footer> <nav class="md-footer__inner md-grid" aria-label="Pied de page"> <a href=python.html class="md-footer__link md-footer__link--prev" aria-label="Précédent: Pilote Python" rel=prev> <div class="md-footer__button md-icon"> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg> </div> <div class=md-footer__title> <div class=md-ellipsis> <span class=md-footer__direction> Précédent </span> Pilote Python </div> </div> </a> </nav> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class=md-copyright> <div class=md-copyright__highlight> Copyright &copy; 2022 - Dr. Hmida Hmida </div> Made with <a href=https://squidfunk.github.io/mkdocs-material/ target=_blank rel=noopener> Material for MkDocs </a> </div> <div class=md-social> <a href=https://gitlab.com/hhmida target=_blank rel=noopener title=gitlab.com class=md-social__link> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 512 512"><!-- Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="m503.5 204.6-.7-1.8-69.7-181.78c-1.4-3.57-3.9-6.59-7.2-8.64-2.4-1.55-5.1-2.515-8-2.81-2.9-.295-5.7.083-8.4 1.11-2.7 1.02-5.1 2.66-7.1 4.78-1.9 2.12-3.3 4.67-4.1 7.44l-47 144H160.8l-47.1-144c-.8-2.77-2.2-5.31-4.1-7.43-2-2.12-4.4-3.75-7.1-4.77a18.1 18.1 0 0 0-8.38-1.113 18.4 18.4 0 0 0-8.04 2.793 18.09 18.09 0 0 0-7.16 8.64L9.267 202.8l-.724 1.8a129.57 129.57 0 0 0-3.52 82c7.747 26.9 24.047 50.7 46.447 67.6l.27.2.59.4 105.97 79.5 52.6 39.7 32 24.2c3.7 1.9 8.3 4.3 13 4.3 4.7 0 9.3-2.4 13-4.3l32-24.2 52.6-39.7 106.7-79.9.3-.3c22.4-16.9 38.7-40.6 45.6-67.5 8.6-27 7.4-55.8-2.6-82z"/></svg> </a> <a href=https://github.com/hhmida target=_blank rel=noopener title=github.com class=md-social__link> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 480 512"><!-- Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg> </a> <a href=https://linkedin.com/in/hhmida target=_blank rel=noopener title=linkedin.com class=md-social__link> <svg xmlns=http://www.w3.org/2000/svg viewbox="0 0 448 512"><!-- Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg> </a> </div> </div> </div> </footer> </div> <div class=md-dialog data-md-component=dialog> <div class="md-dialog__inner md-typeset"></div> </div> <script id=__config type=application/json>{"base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "toc.integrate", "content.code.annotate"], "search": "assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.config.lang": "fr", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Rechercher", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version.title": "S\u00e9lectionner la version"}}</script> <script src=assets/javascripts/bundle.2ab50757.min.js></script> </body> </html>
